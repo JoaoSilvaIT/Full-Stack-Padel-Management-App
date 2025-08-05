@@ -1,0 +1,15 @@
+/* Default style: muted gray */
+.breadcrumb-link {
+    color: #6c6c6c !important; /* Muted gray */
+    text-decoration: none;
+    transition:
+        color 0.3s ease,
+        transform 0.2s ease; /* Smooth transition */
+}
+
+/* Hover style: highlighted (custom color) */
+.breadcrumb-link:hover {
+    color: #363636 !important; /* Darker gray for hover highlight */
+    text-decoration: underline;
+    transform: scale(1.02); /* Slightly enlarge on hover */
+}

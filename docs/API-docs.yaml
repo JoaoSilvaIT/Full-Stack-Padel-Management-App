@@ -1,0 +1,424 @@
+openapi: 3.0.0
+info:
+  title: Club Rental API
+  version: 1.0.0
+paths:
+  /users:
+    post:
+      summary: Create a new user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the user.
+                email:
+                  type: string
+                  description: Email of the user.
+                password:
+                  type: string
+                  description: Password for the new user.
+              required:
+                - name
+                - email
+                - password
+      responses:
+        '201':
+          description: User created successfully
+        '400':
+          description: Invalid data input
+        '409':
+          description: A user with this email already exists
+
+  /users/login:
+    post:
+      summary: Login a user
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: User's email.
+                password:
+                  type: string
+                  description: User's password.
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    format: uuid
+                    description: Authentication token for the user.
+                  uid:
+                    type: integer
+                    description: The user's ID.
+        '400':
+          description: Invalid credentials
+        '404':
+          description: User not found
+
+  /users/{id}:
+    get:
+      summary: Get user by ID
+      operationId: getUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User details retrieved
+        '400':
+          description: Invalid data input
+        '404':
+          description: User not found
+  /user/{uid}/rentals:
+    get:
+      summary: Get rentals by user
+      operationId: getRentalsByUser
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of rentals retrieved
+        '400':
+          description: Invalid data input
+        '404':
+          description: No rentals where found for this User
+  /clubs:
+    post:
+      summary: Create a new club
+      operationId: createClub
+      parameters:
+        - name: name
+          in: body
+          required: true
+          schema:
+            type: string
+        - name: ownerID
+          in: body
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: Club created successfully
+        '400':
+          description: Invalid data input
+        '409':
+          description: One of the parameters already exists in the system and must be unique
+    get:
+      summary: Get all clubs
+      operationId: getClubs
+      responses:
+        '200':
+          description: List of clubs retrieved
+        '404':
+          description: No Clubs were found
+  /clubs/{cid}:
+    get:
+      summary: Get club by ID
+      operationId: getClubByID
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Club details retrieved
+        '400':
+          description: Invalid data input
+        '404':
+          description: Club not found
+  /clubs/{cid}/court:
+    post:
+      summary: Create a new court in a club
+      operationId: createCourt
+      parameters:
+        - name: name
+          in: body
+          required: true
+          schema:
+            type: string
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: Court created successfully
+        '400':
+          description: Invalid data input
+        '409':
+          description: One of the parameters already exists in the system and must be unique
+  /clubs/{cid}/courts:
+    get:
+      summary: Get all courts in a club
+      operationId: getCourtsByClubID
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of courts retrieved
+        '400':
+          description: Invalid data input
+        '404':
+          description: No courts were found
+  /clubs/{cid}/courts/{crid}:
+    get:
+      summary: Get details of a specific court
+      operationId: getCourtDetails
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: crid
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Court details retrieved
+        '400':
+          description: Invalid data input
+        '404':
+          description: Court not found
+  /rentals:
+    post:
+      summary: Create a new rental
+      operationId: createRental
+      parameters:
+        - name: clubID
+          in: body
+          required: true
+          schema:
+            type: integer
+        - name: courtID
+          in: body
+          required: true
+          schema:
+            type: integer
+        - name: startDate
+          in: body
+          required: true
+          schema:
+            type: object
+        - name: startHour
+          in: body
+          required: true
+          schema:
+            type: integer
+        - name: duration
+          in: body
+          required: true
+          schema:
+            type: integer
+        - name: userID
+          in: body
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: Rental created successfully
+        '400':
+          description: Invalid data input
+        '409':
+          description: One of the parameters already exists in the system and must be unique
+  /rentals/user/{uid}:
+    get:
+      summary: Get rentals by user
+      operationId: getRentalsByUserId
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of rentals retrieved
+        '400':
+          description: Invalid data input
+        '404':
+          description: No rentals were found
+  /rentals/{cid}/{crid}:
+    get:
+      summary: Get rentals for a court
+      operationId: getRentals
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: crid
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of rentals retrieved
+        '400':
+          description: Invalid data input
+        '404':
+          description: No rentals were  found
+  /rentals/{cid}/{crid}/available-hours:
+    get:
+      summary: Get available rental hours for a court
+      operationId: getAvailableRentHours
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: crid
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Available rental hours retrieved
+        '400':
+          description: Invalid data input
+        '404':
+          description: No available hours found
+  /rentals/{cid}/{crid}/{rid}:
+    get:
+      summary: Get rental details
+      operationId: getRentalDetails
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: crid
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: rid
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Rental details retrieved
+        '400':
+          description: Invalid data input
+        '404':
+          description: Rental not found
+
+  /rental/{rid}:
+    get:
+      summary: Get rental details by ID
+      operationId: getRentalDetailsById
+      parameters:
+        - name: rid
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Rental details retrieved
+        '400':
+          description: Invalid data input
+        '404':
+          description: Rental not found
+    put:
+      summary: Update a rental
+      operationId: updateRental
+      parameters:
+        - name: rid
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: date
+          in: body
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: startHour
+          in: body
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 23
+        - name: duration
+          in: body
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Rental updated successfully
+        '400':
+          description: Invalid data input
+        '404':
+          description: Rental not found
+        '401':
+          description: Unauthorized - User token not provided or invalid
+
+  /rental/{rid}/delete:
+    delete:
+      summary: Delete a rental
+      operationId: deleteRental
+      parameters:
+        - name: rid
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Rental deleted successfully
+        '400':
+          description: Invalid data input
+        '404':
+          description: Rental not found
+        '401':
+          description: Unauthorized - User token not provided or invalid
