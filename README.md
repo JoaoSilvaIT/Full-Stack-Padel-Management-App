@@ -1,2 +1,9 @@
-# Full-Stack-Padel-Management-App
-This is a full stack web application built with Kotlin (Spring Boot) on the backend and JavaScript (Vanilla) on the frontend. The app is designed to manage and organize entities related to recreational or competitive sports environments.
+
+## Team Members
+
+| Name | Student ID |
+|------|------------|
+| João Silva | 51682 |
+| Gonçalo Pontes | 51642 |
+| Rodrigo Meneses | 50542 |
+
