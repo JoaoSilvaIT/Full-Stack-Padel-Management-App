@@ -1,0 +1,132 @@
+### Test create new User
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "name": "admin",
+  "mail": "admin@admin.com",
+  "password": "Admin123!"
+}
+### Test Get User with id 2
+GET http://localhost:8080/users/
+Accept: application/json
+
+
+### Test login
+GET http://localhost:8080/users/login
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email": "admin@admin.com",
+  "password": "Admin123!"
+}
+
+
+
+### Test Create New Club
+POST http://localhost:8080/club
+Authorization: Bearer 5a5a687a-e6d5-405b-b5f3-5fcbbe8f8609
+Content-Type: application/json
+
+{
+  "name": "New Club 1"
+}
+
+### Test Get Club with id 1
+
+GET http://localhost:8080/club/6
+Accept: application/json
+
+### Test Get all Clubs
+
+GET http://localhost:8080/club
+Accept: application/json
+
+
+
+
+
+
+
+### Test create new court in club with id 1
+POST http://localhost:8080/club/1/court
+Authorization: Bearer 5a5a687a-e6d5-405b-b5f3-5fcbbe8f8609
+Content-Type: application/json
+
+{
+  "name": "New Court 1",
+  "club": "1"
+}
+
+### Test get all courts in club with id 1
+GET http://localhost:8080/club/1/court
+Accept: application/json
+
+
+### Test get court details with id 1 in club with id 1
+GET http://localhost:8080/club/1/court/1
+Accept: application/json
+
+
+
+
+### Test create new rental
+POST http://localhost:8080/rental
+Authorization: Bearer 5a5a687a-e6d5-405b-b5f3-5fcbbe8f8609
+Content-Type: application/json
+
+{
+    "club" : 5,
+    "court": 1,
+    "date": "2025-04-25",
+    "startHour": 6,
+    "duration": 2
+}
+
+
+### Test get all rentals
+GET http://localhost:8080/rental/1/1?date=2025-04-16
+
+### Test get rental details
+GET http://localhost:8080/rental/1/
+Accept: application/json
+
+### Test get available hours
+GET http://localhost:8080/rental/1/1/available_hours?date=2025-04-16
+Accept: application/json
+
+### Test get Rentals by user
+GET http://localhost:8080/user/1/rentals
+
+### Test delete Rental
+DELETE http://localhost:8080/rental/1/delete
+Authorization: Bearer 5a5a687a-e6d5-405b-b5f3-5fcbbe8f8609
+
+### Test Update Rental
+PUT http://localhost:8080/rental/1
+Authorization: Bearer 5a5a687a-e6d5-405b-b5f3-5fcbbe8f8609
+Content-Type: application/json
+
+{
+  "date": "2025-04-16",
+  "startHour": 1,
+  "duration": 3
+}
+
+
+### Test exception handling: User not found
+GET http://localhost:8080/test-exception/user-not-found
+Accept: application/json
+
+### Test exception handling: Club not found
+GET http://localhost:8080/test-exception/club-not-found
+Accept: application/json
+
+### Test exception handling: Internal error
+GET http://localhost:8080/test-exception/internal-error
+Accept: application/json
+
+### Invalid user ID to test real exception
+GET http://localhost:8080/user/999
+Accept: application/json

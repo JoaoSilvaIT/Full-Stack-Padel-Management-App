@@ -1,0 +1,160 @@
+### 1. Create first user
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "mail": "john.doe@example.com"
+}
+
+### 1. Create second user
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "name": "Jane Smith",
+  "mail": "jane.smith@example.com"
+}
+
+### 2. Try to create another user with the same email as the first
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "name": "John Clone",
+  "mail": "john.doe@example.com"
+}
+
+### 3. Create first club
+POST http://localhost:8080/clubs
+Authorization: Bearer 2c5d4ddb-e645-410c-8e66-562660e762dc
+Content-Type: application/json
+
+{
+  "name": "Tennis Club Alpha G"
+}
+
+### 3. Create second club
+POST http://localhost:8080/clubs
+Authorization: Bearer 2c5d4ddb-e645-410c-8e66-562660e762dc
+Content-Type: application/json
+
+{
+  "name": "Tennis Club Beta A"
+}
+
+### 4. Add first court to the first club
+POST http://localhost:8080/clubs/1/courts
+Authorization: Bearer 2c5d4ddb-e645-410c-8e66-562660e762dc
+Content-Type: application/json
+
+{
+  "name": "Court Alpha-1",
+  "club": "1"
+}
+
+### 4. Add second court to the first club
+POST http://localhost:8080/clubs/1/courts
+Authorization: Bearer 2c5d4ddb-e645-410c-8e66-562660e762dc
+Content-Type: application/json
+
+{
+  "name": "Court Alpha-2",
+  "club": "1"
+}
+
+### 5. List all courts of the first club
+GET http://localhost:8080/clubs/1/courts
+Accept: application/json
+
+### 5. List all courts of the second club
+GET http://localhost:8080/clubs/2/courts
+Accept: application/json
+
+### 6. List available hours for the first court (today)
+GET http://localhost:8080/rentals/1/available_hours?date=2025-05-06
+Accept: application/json
+
+### 7. Create a rental with an invalid date
+POST http://localhost:8080/rentals
+Authorization: Bearer 2c5d4ddb-e645-410c-8e66-562660e762dc
+Content-Type: application/json
+
+{
+  "club": 1,
+  "court": 1,
+  "date": "invalid-date",
+  "startHour": 10,
+  "duration": 2
+}
+
+### 8. Create first rental of two hours in the first court (today)
+POST http://localhost:8080/rentals
+Authorization: Bearer 2c5d4ddb-e645-410c-8e66-562660e762dc
+Content-Type: application/json
+
+{
+  "club": 1,
+  "court": 1,
+  "date": "2025-05-06",
+  "startHour": 20,
+  "duration": 2
+}
+
+### 8. Create second rental of two hours in the first court (today)
+POST http://localhost:8080/rentals
+Authorization: Bearer 2c5d4ddb-e645-410c-8e66-562660e762dc
+Content-Type: application/json
+
+{
+  "club": 1,
+  "court": 1,
+  "date": "2025-05-06",
+  "startHour": 17,
+  "duration": 2
+}
+
+### 8. Create third rental of two hours in the first court (today)
+POST http://localhost:8080/rentals
+Authorization: Bearer 2c5d4ddb-e645-410c-8e66-562660e762dc
+Content-Type: application/json
+
+{
+  "club": 1,
+  "court": 1,
+  "date": "2025-05-06",
+  "startHour": 22,
+  "duration": 2
+}
+
+### 9. List available hours for the first court (today) after rentals
+GET http://localhost:8080/clubs/1/courts/1/available_hours?date=2025-04-30
+Accept: application/json
+
+### 10. List rentals of the first court for free day
+GET http://localhost:8080/clubs/1/courts/1/rentals?date=2023-06-14
+Accept: application/json
+
+### 10. List rentals of the first court for today
+GET http://localhost:8080/clubs/1/courts/1/rentals?date=2025-05-06
+Accept: application/json
+
+### 11. Show details of one rental
+GET http://localhost:8080/rentals/1
+Accept: application/json
+
+### 12. List all rentals - page 1 (length 2)
+GET http://localhost:8080/clubs/1/courts/1/rentals?date=2025-05-06&skip=0&limit=2
+Accept: application/json
+
+### 12. List all rentals - page 2 (length 2)
+GET http://localhost:8080/clubs/1/courts/1/rentals?date=2025-05-06&skip=2&limit=2
+Accept: application/json
+
+### 13. Remove a rental
+DELETE http://localhost:8080/rentals/1
+Authorization: Bearer 2c5d4ddb-e645-410c-8e66-562660e762dc
+
+### 14. Try to show details of the removed rental
+GET http://localhost:8080/rentals/1
+Accept: application/json
